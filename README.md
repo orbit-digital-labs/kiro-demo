@@ -7,9 +7,8 @@
 - `app.js` — เครื่องยนต์ที่ทำไว้แล้ว (เพิ่ม/แก้ไข/ลบรายการ · ยอดสรุป · ลิสต์แบ่งกลุ่มรายเดือน ·
   ตัวเลือกเดือน · กราฟรายจ่ายตามหมวด · เก็บลง `localStorage` · ข้อมูลตัวอย่างย้อนหลัง 3 เดือน)
 - `.kiro/steering/rules.md` — **กฎทั้งหมดอยู่ที่นี่ที่เดียว** (contract + เพดานคุณภาพ + กติกาใช้ design skill)
-- `.kiro/steering/ui-ux-pro-max/` — design intelligence ที่ agent ใช้เลือก palette / ฟอนต์ / สไตล์ (โหลดอัตโนมัติ)
-  **ไม่ได้อยู่ใน repo นี้** (เป็น skill ของบุคคลที่สาม) ติดตั้งเองโดยวางโฟลเดอร์ `ui-ux-pro-max`
-  ไว้ที่ `.kiro/steering/` ก่อนเริ่มงาน — ถ้าไม่มี agent จะข้ามไปใช้ Design Read + pre-flight ใน `rules.md` แทน
+- `.kiro/steering/ui-ux-pro-max/` — design intelligence ที่ agent ใช้เลือก palette / ฟอนต์ / สไตล์
+  (โหลดอัตโนมัติ · เป็น skill ของบุคคลที่สาม รวมมาไว้ในโปรเจกต์เดโมนี้เพื่อให้ clone แล้วใช้ได้เลย)
 - hook 2 ตัว: QA ก่อนโชว์ลูกค้า · สรุปฟีเจอร์ท้าย session
 
 **ไม่มี `index.html` และ `style.css` ให้** — สองไฟล์นี้แต่ละทีมสร้างเองตอนทำงาน
