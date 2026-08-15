@@ -1,0 +1,5 @@
+node_modules/
+.DS_Store
+
+# skill ของบุคคลที่สาม ไม่เอาขึ้น repo สาธารณะ — ติดตั้งเองตาม README
+.kiro/steering/ui-ux-pro-max/
