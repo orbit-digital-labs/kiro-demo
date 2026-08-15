@@ -14,13 +14,14 @@ inclusion: manual
 - **`[hidden] { display: none !important; }` ยังอยู่ใน `style.css`** และไม่มี class ไหนตั้ง `display` ทับ
   `#storageBanner` `#cancelEditBtn` `#emptyState` และช่อง error ทั้งสาม
 - **radio ประเภทรายการ:** ทั้งสองตัวมี `name="type"` ร่วมกัน และมี `checked` อยู่ตัวเดียว
-- **`#txForm` มี `novalidate`** (ถ้าหาย ระบบ error ภาษาไทยของแอพจะไม่ทำงาน)
+- **`#txForm` มี `novalidate`** (ถ้าหาย ระบบ error ของแอพเองจะไม่ทำงาน)
 - **สถานะที่เลือกของตัวเลือกรายรับ/รายจ่ายยังมองเห็น** — ถ้า `<input>` อยู่ใน `<label>`
   ต้องใช้ `label:has(input:checked)` ไม่ใช่ `input:checked + label`
-- **`[data-i18n]` ทุกตัวอยู่บน element ที่ไม่มีลูก** และข้อความที่ผู้ใช้เห็นทุกจุดมี `data-i18n`
-  พร้อม key ที่มีจริงใน `STRINGS`
+- **element ที่ JS เขียนทับข้อความไม่มีลูก** (`formTitle` `submitBtn` `monthLabel` `incomeAmt`
+  `expenseAmt` `balanceAmt` `emptyState` `txCount` `spendingTotal` — `textContent` ลบของข้างในทิ้ง)
+  และข้อความที่ผู้ใช้เห็นเป็นภาษาไทยครบทุกจุด
 - **class ที่ JS สร้าง** (`tx__*` `tx-month__*` `spending__*` ตามรายการใน `rules.md`) มี CSS รองรับครบ
-- `<script defer src="app.js">` และ `<meta name="viewport">` อยู่ครบ
+- `<script defer src="app.js">` · `<meta name="viewport">` · `<title>` อยู่ครบ
 
 ## 2. Interaction ครบ
 

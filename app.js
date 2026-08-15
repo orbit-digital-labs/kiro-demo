@@ -25,49 +25,8 @@ const CATEGORIES = {
 
 const FALLBACK_CATEGORY = 'other';
 
-// ข้อความทุกบรรทัดที่ผู้ใช้เห็น แก้ที่นี่ที่เดียว (แอพนี้ภาษาไทยอย่างเดียว)
-const STRINGS = {
-  appTitle: 'บันทึกรายรับรายจ่าย',
-  summaryHeading: 'สรุปยอด',
-  income: 'รายรับ',
-  expense: 'รายจ่าย',
-  balance: 'คงเหลือ',
-  addTitle: 'เพิ่มรายการ',
-  editTitle: 'แก้ไขรายการ',
-  type: 'ประเภท',
-  typeExpense: 'รายจ่าย',
-  typeIncome: 'รายรับ',
-  amount: 'จำนวนเงิน',
-  category: 'หมวดหมู่',
-  date: 'วันที่',
-  note: 'รายละเอียด',
-  noteHint: 'ไม่ใส่ก็ได้ ระบบจะใช้ชื่อหมวดหมู่แทน',
-  save: 'บันทึก',
-  update: 'อัปเดต',
-  cancel: 'ยกเลิก',
-  listTitle: 'รายการทั้งหมด',
-  items: 'รายการ',
-  monthPrev: 'เดือนก่อน',
-  monthNext: 'เดือนถัดไป',
-  monthAll: 'ทั้งหมด',
-  monthAllLabel: 'ทุกเดือน',
-  emptyMonth: 'เดือนนี้ยังไม่มีรายการ',
-  thItem: 'รายการ',
-  thAmount: 'จำนวนเงิน',
-  spendingTitle: 'รายจ่ายตามหมวดหมู่',
-  spendingEmpty: 'ช่วงที่เลือกยังไม่มีรายจ่าย',
-  empty: 'ยังไม่มีรายการ เพิ่มรายการแรกจากฟอร์มได้เลย',
-  edit: 'แก้ไข',
-  delete: 'ลบ',
-  confirmDelete: 'ลบรายการนี้ใช่ไหม',
-  errAmount: 'กรอกจำนวนเงินมากกว่า 0',
-  errCategory: 'เลือกหมวดหมู่',
-  errDate: 'เลือกวันที่',
-  saveFailed: 'บันทึกลงเครื่องไม่สำเร็จ ข้อมูลจะหายเมื่อปิดหน้านี้',
-  storageBroken: 'ข้อมูลที่บันทึกไว้เสียหาย จึงเปิดขึ้นมาเป็นรายการว่าง',
-  resetStorage: 'ล้างข้อมูลที่เสียทิ้ง',
-  storageCleared: 'ล้างข้อมูลที่เสียเรียบร้อยแล้ว',
-};
+// ข้อความคงที่ (หัวข้อ ป้าย ปุ่ม) เขียนตรง ๆ ใน index.html
+// ข้อความที่ JS สร้างขึ้นเอง เขียนตรง ๆ ตรงจุดที่ใช้ในไฟล์นี้
 
 const LOCALE = 'th-TH';
 const CURRENCY = 'THB';
@@ -102,10 +61,6 @@ const store = {
 /* ===== HELPERS ===== */
 
 const $ = id => document.getElementById(id);
-
-function t(key) {
-  return STRINGS[key] != null ? STRINGS[key] : key;
-}
 
 function catLabel(key) {
   return CATEGORIES[key] || CATEGORIES[FALLBACK_CATEGORY] || key;
@@ -202,7 +157,7 @@ const storage = {
         transactions: list,
       }));
     } catch (err) {
-      setStatus(t('saveFailed'));
+      setStatus('บันทึกลงเครื่องไม่สำเร็จ ข้อมูลจะหายเมื่อปิดหน้านี้');
     }
   },
 
@@ -357,14 +312,8 @@ function buildSeedData() {
 
 /* ===== RENDER — หนึ่งหน้าที่ต่อหนึ่งฟังก์ชัน ===== */
 
-// เติมข้อความทุกจุดที่มี data-i18n และ option ของหมวดหมู่
-function renderI18n() {
-  document.title = t('appTitle');
-
-  document.querySelectorAll('[data-i18n]').forEach(node => {
-    node.textContent = t(node.dataset.i18n);
-  });
-
+// เติม option ของ #txCategory จาก CATEGORIES — เพิ่ม/ลบหมวดหมู่แก้ที่ CONFIG ที่เดียว
+function renderCategoryOptions() {
   const select = $('txCategory');
   const keep = select.value;
   select.textContent = '';
@@ -374,15 +323,13 @@ function renderI18n() {
     select.appendChild(opt);
   });
   if (keep && CATEGORIES[keep]) select.value = keep;
-
-  renderFormMode();
 }
 
 // ฟอร์มมี 2 โหมด: เพิ่มใหม่ กับ แก้ไขของเดิม
 function renderFormMode() {
   const editing = store.editingId != null;
-  $('formTitle').textContent = editing ? t('editTitle') : t('addTitle');
-  $('submitBtn').textContent = editing ? t('update') : t('save');
+  $('formTitle').textContent = editing ? 'แก้ไขรายการ' : 'เพิ่มรายการ';
+  $('submitBtn').textContent = editing ? 'อัปเดต' : 'บันทึก';
   $('cancelEditBtn').hidden = !editing;
 }
 
@@ -394,7 +341,7 @@ function renderMonthNav() {
   if (activeMonth !== 'all' && !keys.includes(activeMonth)) activeMonth = 'all';
 
   const index = keys.indexOf(activeMonth);
-  $('monthLabel').textContent = activeMonth === 'all' ? t('monthAllLabel') : fmtMonth(activeMonth);
+  $('monthLabel').textContent = activeMonth === 'all' ? 'ทุกเดือน' : fmtMonth(activeMonth);
   $('monthPrevBtn').disabled = !keys.length || (index > -1 && index === keys.length - 1);
   $('monthNextBtn').disabled = activeMonth === 'all' || index === 0;
   $('monthAllBtn').disabled = activeMonth === 'all';
@@ -417,9 +364,11 @@ function renderList() {
   const rows = visibleTransactions();
 
   list.textContent = '';
-  $('emptyState').textContent = activeMonth === 'all' ? t('empty') : t('emptyMonth');
+  $('emptyState').textContent = activeMonth === 'all'
+    ? 'ยังไม่มีรายการ เพิ่มรายการแรกจากฟอร์มได้เลย'
+    : 'เดือนนี้ยังไม่มีรายการ';
   $('emptyState').hidden = rows.length > 0;
-  $('txCount').textContent = rows.length ? `${rows.length} ${t('items')}` : '';
+  $('txCount').textContent = rows.length ? `${rows.length} รายการ` : '';
 
   const frag = document.createDocumentFragment();
   let currentMonth = null;
@@ -455,10 +404,10 @@ function renderList() {
       (isIncome ? '+' : '−') + fmtMoney(tx.amount));
 
     const actions = el('div', 'tx__actions');
-    const editBtn = el('button', 'tx__btn', t('edit'));
+    const editBtn = el('button', 'tx__btn', 'แก้ไข');
     editBtn.type = 'button';
     editBtn.dataset.act = 'edit';
-    const delBtn = el('button', 'tx__btn tx__btn--danger', t('delete'));
+    const delBtn = el('button', 'tx__btn tx__btn--danger', 'ลบ');
     delBtn.type = 'button';
     delBtn.dataset.act = 'delete';
     actions.append(editBtn, delBtn);
@@ -483,7 +432,7 @@ function renderSpending() {
 
   if (!rows.length) {
     if (totalNode) totalNode.textContent = '';
-    host.appendChild(el('p', 'spending__empty', t('spendingEmpty')));
+    host.appendChild(el('p', 'spending__empty', 'ช่วงที่เลือกยังไม่มีรายจ่าย'));
     return;
   }
 
@@ -544,9 +493,9 @@ function readForm() {
 function validate(draft) {
   clearFieldErrors();
   let ok = true;
-  if (!isFinite(draft.amount) || draft.amount <= 0) { showFieldError('txAmount', t('errAmount')); ok = false; }
-  if (!CATEGORIES[draft.category]) { showFieldError('txCategory', t('errCategory')); ok = false; }
-  if (!isDateStr(draft.date)) { showFieldError('txDate', t('errDate')); ok = false; }
+  if (!isFinite(draft.amount) || draft.amount <= 0) { showFieldError('txAmount', 'กรอกจำนวนเงินมากกว่า 0'); ok = false; }
+  if (!CATEGORIES[draft.category]) { showFieldError('txCategory', 'เลือกหมวดหมู่'); ok = false; }
+  if (!isDateStr(draft.date)) { showFieldError('txDate', 'เลือกวันที่'); ok = false; }
   return ok;
 }
 
@@ -617,7 +566,7 @@ $('txList').addEventListener('click', event => {
   }
 
   if (btn.dataset.act === 'delete') {
-    if (!confirm(t('confirmDelete'))) return;
+    if (!confirm('ลบรายการนี้ใช่ไหม')) return;
     store.transactions = store.transactions.filter(item => item.id !== id);
     if (store.editingId === id) resetForm();
     store.commit();
@@ -632,7 +581,7 @@ $('resetStorageBtn').addEventListener('click', () => {
   storage.clear();
   store.storageBroken = false;
   $('storageBanner').hidden = true;
-  setStatus(t('storageCleared'));
+  setStatus('ล้างข้อมูลที่เสียเรียบร้อยแล้ว');
 });
 
 /* bootstrap */
@@ -654,5 +603,6 @@ if (!store.storageBroken && !localStorage.getItem(SEEDED_KEY)) {
 
 $('storageBanner').hidden = !store.storageBroken;
 $('txDate').value = todayStr();
-renderI18n();
+renderCategoryOptions();
+renderFormMode();
 renderAll();

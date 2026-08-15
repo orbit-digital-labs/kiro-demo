@@ -33,14 +33,14 @@ CSS เขียนมือใน `style.css` · JS วานิลลาใน
 ชื่อผูกกับสูตร `<inputId> + "Err"`) · `spendingChart` `spendingTotal` (กราฟรายจ่ายตามหมวด)
 
 **ชนิด element ที่บังคับ**
-- `#txForm` = `<form novalidate>` — **ไม่มี `novalidate` = error ภาษาไทยของแอพไม่ทำงาน** เบราว์เซอร์เด้ง tooltip ตัวเองแทน
+- `#txForm` = `<form novalidate>` — **ไม่มี `novalidate` = error ของแอพเองไม่ทำงาน** เบราว์เซอร์เด้ง tooltip ตัวเองแทน
 - `#submitBtn` = ปุ่ม submit ที่อยู่ใน form (ไม่มีใครฟัง click ของมัน)
 - `#txCategory` = `<select>` — option ถูกสร้างใหม่ทั้งหมดโดย JS ที่เขียนมือไว้จะโดนลบ
 - `#txDate` = `<input type="date">` · `#txAmount` ต้อง focus ได้ (ตอนกดแก้ไขจะ focus ให้)
 - `#txList` = `<ul>` หรือ `<ol>` (JS ใส่ `<li>` เข้าไป) · `#txType` ต้องครอบ radio 2 ตัว
 - ปุ่ม/ลิงก์ที่มี `data-act` ห้ามอยู่ใน `#txList` นอกแถว `.tx`
 
-**attribute ที่ห้ามเปลี่ยนชื่อ:** `data-i18n` · `data-act` · `data-id` · class `tx`
+**attribute ที่ห้ามเปลี่ยนชื่อ:** `data-act` · `data-id` · class `tx`
 
 **class ที่ JS สร้างเอง — ต้องมี CSS รองรับครบ (เปลี่ยนชื่อได้ถ้าแก้ใน `app.js` พร้อมกัน)**
 `tx` `tx--editing` `tx--new` `tx__main` `tx__note` `tx__meta` `tx__amt` `tx__amt--in` `tx__amt--out`
@@ -52,7 +52,8 @@ CSS เขียนมือใน `style.css` · JS วานิลลาใน
 ทับ `#storageBanner` `#cancelEditBtn` `#emptyState` และช่อง error ทั้งสาม
 (ถ้าหาย banner ข้อมูลเสียกับปุ่มยกเลิกจะโผล่ค้างถาวร)
 
-**ต้องมีใน `index.html`:** `<script defer src="app.js">` และ `<meta name="viewport">`
+**ต้องมีใน `index.html`:** `<script defer src="app.js">` · `<meta name="viewport">` ·
+`<title>บันทึกรายรับรายจ่าย</title>` (ไม่มีแล้วแท็บเบราว์เซอร์ว่างตอนโชว์ลูกค้า — ไม่มี JS ตั้งให้)
 
 ### 3 กับดักที่พังแบบเงียบ (ไม่มี error ให้เห็น แต่ผลลัพธ์ผิด)
 
@@ -63,9 +64,17 @@ CSS เขียนมือใน `style.css` · JS วานิลลาใน
 
 ### ข้อความ
 
-แอพนี้ **ภาษาไทยอย่างเดียว** ข้อความที่ผู้ใช้เห็นต้องมี key ใน `STRINGS` (โซน CONFIG ของ `app.js`)
-และ element ต้องมี `data-i18n="<key>"` · `renderI18n()` เซ็ต `textContent` ซึ่งลบลูกทิ้ง
-→ **`data-i18n` ต้องอยู่บน element ที่ไม่มีลูก** เอา `<span>` ไปใส่ในปุ่มที่มี `data-i18n` แล้วของข้างในหาย
+แอพนี้ **ภาษาไทยอย่างเดียว** ไม่มีตารางข้อความกลาง เขียนข้อความตรงจุดที่ใช้เลย
+- หัวข้อ ป้าย ปุ่มที่อยู่นิ่ง ๆ → เขียนเป็นข้อความไทยตรง ๆ ใน `index.html`
+- ข้อความที่ JS สร้าง (ปุ่มแก้ไข/ลบ, error ใต้ field, empty state, ข้อความสถานะ) → อยู่ใน `app.js` แล้ว
+  แก้ตรงจุดที่ใช้ ห้ามยกกลับไปทำเป็น object รวม
+
+**ยกเว้นหมวดหมู่:** ชื่อหมวดหมู่แก้ที่ `CATEGORIES` (โซน CONFIG) ที่เดียว
+`renderCategoryOptions()` สร้าง `<option>` ของ `#txCategory` ใหม่ทั้งหมดจากตัวนี้
+
+**element ที่ JS เขียนทับข้อความ ต้องไม่มีลูก** — JS เซ็ต `textContent` ซึ่งลบของข้างในทิ้งหมด
+เอา `<span>` `<svg>` ไปใส่ในนี้แล้วหายเงียบ ๆ:
+`formTitle` `submitBtn` `monthLabel` `incomeAmt` `expenseAmt` `balanceAmt` `emptyState` `txCount` `spendingTotal`
 
 ## 3. เพดานคุณภาพ — เป็นกฎ ไม่ใช่รสนิยม ห้ามต่อรอง
 
